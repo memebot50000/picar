@@ -5,14 +5,22 @@ import time
 drive_motor = Motor(forward=17, backward=27, enable=12)
 steer_motor = Motor(forward=22, backward=23)
 
-def forward():
+def forward(t):
     drive_motor.forward()
+    time.sleep(t)
+    drive_motor.stop()
 
-def backward():
+def backward(t):
     drive_motor.backward()
+    time.sleep(t)
+    drive_motor.stop
 
-def left():
-    steer_motor.forward()
+def left(d, t):
+    if d == "w":
+        steer_motor.forward()
+        forward(t)
+        
+        
 
 def right():
     steer_motor.backward()
