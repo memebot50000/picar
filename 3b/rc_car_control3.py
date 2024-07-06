@@ -35,20 +35,19 @@ def left(d, t):
         stop()
 
 def right(d, t):
-    '''turns left going d direction for t seconds. d must be "w" or "s"'''
+    '''turns right going d direction for t seconds. d must be "w" or "s"'''
     if d == "w":
         steer_motor.backward()
         forward(t)
         steer_motor.stop()
     elif d == "s":
-        steer_motor.forward()
+        steer_motor.backward()
         backward(t)
         steer_motor.stop()
     else:
         stop()
-        
 
-def test()
+def test():
     forward(0.5)
     backward(0.5)
     steer_motor.forward()
@@ -57,50 +56,50 @@ def test()
     steer_motor.backward()
     time.sleep(0.5)
     steer_motor.stop()
-    print ("test completed")
-
-
-
-
+    print("test completed")
 
 print("RC Car Control Ready. Enter W,A,S,D to control. Enter corresponding times after commands. Enter Q to quit. Enter T to test. Remember to put spaces between commands/times or the code will break.")
 
 while True:
-    kcmds = str(input("Enter command(s): ").lower())
-    tcmds = str(input("Enter time(s): ")
+    kcmds = input("Enter command(s): ").lower()
+    tcmds = input("Enter time(s): ")
     klst = kcmds.split()
     tlst = tcmds.split()
-    for i in range(len(tlst)):
-        tlst[i] = int(tlst[i])
+    tlst = [float(t) for t in tlst]  # Convert times to float
+    
     try:
-        for i in range(len(kcmds)):
-            if kcmds[i] == 'w':
+        for i in range(len(klst)):
+            if klst[i] == 'w':
                 forward(tlst[i])
-            elif kcmds[i] == 's':
+            elif klst[i] == 's':
                 backward(tlst[i])
-            elif kcmds[i] == 'a':
-                if kcmds[i-1] == "w":
+            elif klst[i] == 'a':
+                if i > 0 and klst[i-1] == "w":
                     left("w", tlst[i])
-                elif kcmds[i-1] == "s"
+                elif i > 0 and klst[i-1] == "s":
                     left("s", tlst[i])
                 else:
                     stop()
-            elif kcmds[i] == 'd':
-                if kcmds[i-1] == "w":
+            elif klst[i] == 'd':
+                if i > 0 and klst[i-1] == "w":
                     right("w", tlst[i])
-                elif kcmds[i-1] == "s"
+                elif i > 0 and klst[i-1] == "s":
                     right("s", tlst[i])
                 else:
                     stop()
-            elif kcmds[i] == "t":
+            elif klst[i] == "t":
                 test()
-            elif kcmds[i] == 'q':
+            elif klst[i] == 'q':
                 stop()
-                break
+                print("RC Car Control stopped.")
+                exit()
             else:
                 stop()
-        except:
-            print("Invalid command input. Check command (or program) syntax and try again.")
+    except IndexError:
+        print("Error: Number of commands and times do not match.")
+    except ValueError:
+        print("Error: Invalid time input. Please enter numeric values for times.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+    
     time.sleep(0.1)  # Short delay to prevent overwhelming the system
-
-print("RC Car Control stopped.")
