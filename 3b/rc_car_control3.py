@@ -11,13 +11,13 @@ def stop():
 
 def forward(t):
     '''drives car forward for t seconds'''
-    drive_motor.forward()
+    drive_motor.backward()
     time.sleep(t)
     drive_motor.stop()
 
 def backward(t):
     '''drives car backward for t seconds'''
-    drive_motor.backward()
+    drive_motor.forward()
     time.sleep(t)
     drive_motor.stop()
 
