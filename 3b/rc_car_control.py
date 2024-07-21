@@ -1,8 +1,7 @@
 import serial
 import cv2
 import numpy as np
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+from picamera2 import Picamera2  # Changed from picamera to picamera2
 from pymavlink import mavutil
 import time
 import RPi.GPIO as GPIO
@@ -44,13 +43,12 @@ GPIO.setup(THROTTLE_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(STEERING_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Set up serial connection to SP Racing MOF3 V1 via USB
-ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)  # Changed to ttyACM0
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 
 # Set up camera
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(640, 480))
+camera = Picamera2()  # Changed to Picamera2
+camera.configure(camera.create_still_configuration(main={"size": (640, 480)}))
+camera.start()
 
 # Allow the camera to warm up
 time.sleep(0.1)
@@ -107,9 +105,7 @@ def read_imu_data():
     return None
 
 def capture_image():
-    rawCapture.truncate(0)
-    camera.capture(rawCapture, format="bgr")
-    return rawCapture.array
+    return camera.capture_array()  # Changed to use Picamera2 method
 
 def process_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -234,3 +230,4 @@ finally:
     drive_pwm.stop()
     steer_pwm.stop()
     GPIO.cleanup()
+    camera.stop()  # Stop the camera when the script ends
