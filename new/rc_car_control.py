@@ -5,7 +5,7 @@ import websockets
 from aiohttp import web
 
 # Set up the motors
-drive_motor = Motor(forward=17, backward=27, enable=12)
+drive_motor = Motor(forward=27, backward=17, enable=12)
 steer_motor = Motor(forward=22, backward=23, enable=13)
 
 def set_motors(drive, steer):
