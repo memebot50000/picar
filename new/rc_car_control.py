@@ -87,7 +87,7 @@ async def index(request):
             width: 200px;
             height: 200px;
             margin: 50px auto;
-            border: 1px solid black;
+            border: 1px solid white;
         }
         #armed-switch {
             margin: 20px auto;
@@ -109,7 +109,7 @@ async def index(request):
             zone: document.getElementById('joystick'),
             mode: 'static',
             position: { left: '50%', top: '50%' },
-            color: 'blue',
+            color: 'green',
             size: 150
         });
 
